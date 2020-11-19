@@ -1,0 +1,36 @@
+{
+  "extends": ["react-app", "prettier", "plugin:prettier/recommended"],
+
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "warn",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
+    "react/jsx-one-expression-per-line": [0, { "allow": "literal" }],
+    "react/prop-types": [1, {}],
+    "react/require-default-props": 0,
+    "no-extra-boolean-cast": "warn",
+
+    "no-plusplus": ["warn", { "allowForLoopAfterthoughts": true }],
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+
+    "no-unused-expressions": 0,
+
+    "react/button-has-type": [
+      1,
+      {
+        "button": true,
+        "submit": true,
+        "reset": true
+      }
+    ],
+    "no-unused-vars": "warn",
+
+    "no-use-before-define": ["error", { "functions": false }]
+  }
+}
