@@ -36,12 +36,11 @@ export const Letter = ({ children }) => {
     setRemainingTrials(data.remainingTrials)
   }
 
-  // letter was found, letter was not found
   return (
     <span
       className={classnames('Letter', {
         letterIsInWord: isLetterInWord,
-        letterNotInWord: isLetterInWord === false
+        letterNotInWord: isLetterInWord === false //false, not any falsy value
       })}
       value={children}
       onClick={sendLetterToCompare}

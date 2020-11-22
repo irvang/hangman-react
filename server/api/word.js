@@ -94,10 +94,9 @@ const getMerriamWord = async ({ lettersMin, lettersMax }) => {
       if (data.results[0].synonyms) {
         console.log('SYNONYM', data.results[0].synonyms.toString())
       }
-      console.log(
-        'DEFINITIONS',
-        data.results.map((item) => item.definition)
-      )
+
+      const definitions = data.results.map((item) => item.definition)
+      console.log('DEFINITIONS', definitions)
 
       if (data.results.typeOf) {
         console.log('TYPE OF', data.typeOf)
@@ -131,7 +130,7 @@ router.get('/:lettersMin/:lettersMax', async (req, res) => {
     const { word } = data
     let maskedWord = ''
     // generate word dash string
-    for (let letter of word) {
+    for (let _ of word) {
       maskedWord += '_'
     }
     console.log('DASHES', maskedWord, maskedWord.length)

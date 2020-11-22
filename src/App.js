@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Alphabet } from './components/Alphabet'
 import { Context } from './Context'
 
-const Canvas = (props) => <canvas id="canvas-hang" className="Canvas" />
+import { Canvas } from './components/Canvas'
 
 const WordDisplay = ({ maskedWord }) => (
   <div className="WordDisplay">{maskedWord}</div>
@@ -22,7 +22,7 @@ const RemainingTrials = (props) => {
 const Options = (props) => {
   const options = []
 
-  for (let i = 2; i <= 15; i++) {
+  for (let i = 3; i <= 20; i++) {
     options.push(
       <option value={i} key={i}>
         {i}
@@ -38,7 +38,7 @@ function App() {
   const [maxLength, setMaxLength] = useState(15)
   const [isPhrase, setIsPhrase] = useState(false)
   const [maskedWord, setMaskedWord] = useState('___')
-  const [remainingTrials, setRemainingTrials] = useState(0)
+  const [remainingTrials, setRemainingTrials] = useState(null)
   const [resetChildren, setResetChildren] = useState(false)
 
   const handleMinLengthChange = (event) => {
@@ -86,7 +86,7 @@ function App() {
         resetChildren
       }}
     >
-      <main class="center-screen">
+      <main className="center-screen">
         <Alphabet />
 
         <Canvas />
@@ -95,8 +95,8 @@ function App() {
 
         <RemainingTrials />
 
-        <section class="main-2">
-          <div class="game-mode">
+        <section className="main-2">
+          <div className="game-mode">
             Game mode:&nbsp;
             <label>
               <input type="checkbox" name="phrase" value="word" checked /> Word
@@ -127,7 +127,7 @@ function App() {
             {/* <div>
             <label htmlFor="difficulty">Difficulty</label>
             <select
-              class="isDisabled"
+              className="isDisabled"
               name="difficulty"
               id="difficulty"
               defaultValue={3}
@@ -139,11 +139,11 @@ function App() {
             <div>
               <label htmlFor="min-length">Min length</label>
               <select
-                class="isDisabled"
+                className="isDisabled"
                 name="min-length"
                 id="min-length"
                 onChange={handleMinLengthChange}
-                defaultValue={2}
+                defaultValue={3}
               >
                 <Options />
               </select>
@@ -152,7 +152,7 @@ function App() {
             <div>
               <label htmlFor="max-length">Max length</label>
               <select
-                class="isDisabled"
+                className="isDisabled"
                 defaultValue={15}
                 name="max-length"
                 id="max-length"
@@ -163,7 +163,9 @@ function App() {
             </div>
           </section>
 
-          <section class="definitions">{/* HOLDS WORDS DEFINITIONS */}</section>
+          <section className="definitions">
+            {/* HOLDS WORDS DEFINITIONS */}
+          </section>
         </section>
 
         {/* // <script type="module" src="js/index.js"></script> */}

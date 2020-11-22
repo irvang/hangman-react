@@ -1,7 +1,7 @@
 import { Letter } from '../Letter'
 
 export const Alphabet = (props) => (
-  <div class="Alphabet">
+  <div className="Alphabet">
     <div className="Alphabet_row">
       <Letter>a</Letter>
       <Letter>b</Letter>
