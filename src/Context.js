@@ -1,3 +1,3 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 export const Context = React.createContext()

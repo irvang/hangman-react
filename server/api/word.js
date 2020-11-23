@@ -124,7 +124,7 @@ router.get('/:lettersMin/:lettersMax', async (req, res) => {
 
   try {
     const { lettersMin, lettersMax } = req.params
-    console.log('HIT THE WORDS!', lettersMin, lettersMax)
+
     const data = await getWordsApi({ lettersMin, lettersMax })
 
     const { word } = data
@@ -133,12 +133,13 @@ router.get('/:lettersMin/:lettersMax', async (req, res) => {
     for (let _ of word) {
       maskedWord += '_'
     }
-    console.log('DASHES', maskedWord, maskedWord.length)
+
     const sessData = req.session
     sessData.wordData = data
     sessData.maskedWord = maskedWord
     sessData.testedLetters = []
     sessData.remainingTrials = 6
+    sessData.isGameWon = null
 
     res.send({
       wordLength: word.length,
@@ -154,42 +155,60 @@ router.get('/data', (req, res, next) => {
   const { wordData } = req.session
   console.log('DATA IN SESSION', wordData)
 
+  console.log('COOKIE', req.session.cookie)
   return res.send({ theData: req.session })
 })
 
-router.post('/letter', (req, res, next) => {
+router.post('/', (req, res, next) => {
   const { letter } = req.body
+
   const sessData = req.session
+  // if(!sessData) {
+
+  // }
+
+  console.log('COOKIE', req.session.cookie)
+
   const { word } = sessData.wordData
   const { maskedWord } = sessData
 
-  if (sessData.remainingTrials > 0) {
-    sessData.remainingTrials -= 1
-  }
-
   console.log('BODY, wordData: ', letter, word)
 
-  let isLetterInWord = false
-  if (word.includes(letter)) {
-    isLetterInWord = true
-    let newMaskedWord = ''
+  let isLetterInWord = null
 
-    for (let i = 0; i < word.length; i++) {
-      if (word[i] === letter) {
-        newMaskedWord += letter
-      } else {
-        newMaskedWord += maskedWord[i]
+  if (sessData.remainingTrials > 0 && sessData.isGameWon === null) {
+    if (word.includes(letter)) {
+      isLetterInWord = true
+      let newMaskedWord = ''
+
+      for (let i = 0; i < word.length; i++) {
+        if (word[i] === letter) {
+          newMaskedWord += letter
+        } else {
+          newMaskedWord += maskedWord[i]
+        }
+      }
+
+      sessData.maskedWord = newMaskedWord
+
+      if (word === newMaskedWord) {
+        sessData.isGameWon = true
+      }
+    } else {
+      isLetterInWord = false
+      sessData.remainingTrials -= 1
+
+      if (sessData.remainingTrials === 0) {
+        sessData.isGameWon = false
       }
     }
-
-    sessData.maskedWord = newMaskedWord
-    console.log('newStuff:', newMaskedWord)
   }
 
   res.send({
     maskedWord: sessData.maskedWord,
     isLetterInWord,
-    remainingTrials: sessData.remainingTrials
+    remainingTrials: sessData.remainingTrials,
+    isGameWon: sessData.isGameWon
   })
 })
 module.exports = router

@@ -31,6 +31,8 @@ const wordsApiRouter = require('./api/word')
 const PORT = process.env.PORT || 8080
 
 app.set('trust proxy', 1) // trust first proxy
+
+app.use(express.json())
 app.use(
   session({
     secret: 'keyboard cat',
@@ -38,17 +40,14 @@ app.use(
     saveUninitialized: true,
     // https://stackoverflow.com/questions/35066462/req-session-in-express-session-not-persisting
     // cookie: { secure: true, maxAge: 60000 }
-    cookie: { secure: false, maxAge: 60000 }
+    cookie: {
+      secure: false,
+      maxAge: 60000
+    }
   })
 )
 
-app.use(express.json())
-app.use((req, res, next) => {
-  console.log('BASE URL: ', req.baseUrl)
-  next()
-})
-
-app.use('/word', wordsApiRouter)
+app.use('/api/word', wordsApiRouter)
 
 //====SERVER CONNECTION
 app.listen(PORT, function (a, b, c, d) {

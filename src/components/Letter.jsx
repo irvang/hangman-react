@@ -1,8 +1,10 @@
 import axios from 'axios'
-import React, { useState, useEffect } from 'react'
-import { Context } from '../../Context'
-
+import React, { useState, useEffect, useCallback } from 'react'
+import { Context } from '../Context'
 import classnames from 'classnames'
+import { API } from '../API'
+
+const { word: wordApi } = API
 
 export const Letter = ({ children }) => {
   const {
@@ -22,19 +24,22 @@ export const Letter = ({ children }) => {
     }
   }, [resetChildren, setResetChildren])
 
-  const sendLetterToCompare = async (event) => {
-    console.log(event.target.textContent, children)
+  const sendLetterToCompare = useCallback(
+    (event) => {
+      ;(async () => {
+        const { data } = await wordApi.compareLetter({
+          letter: event.target.textContent
+        })
 
-    const { data } = await axios.post('/word/letter', {
-      letter: event.target.textContent
-    })
+        const { maskedWord, isLetterInWord } = data
 
-    const { maskedWord, isLetterInWord } = data
-    console.log('received:', maskedWord, isLetterInWord)
-    setIsLetterInWord(isLetterInWord)
-    setMaskedWord(maskedWord)
-    setRemainingTrials(data.remainingTrials)
-  }
+        setIsLetterInWord(isLetterInWord)
+        setMaskedWord(maskedWord)
+        setRemainingTrials(data.remainingTrials)
+      })()
+    },
+    [setRemainingTrials, setMaskedWord]
+  )
 
   return (
     <span

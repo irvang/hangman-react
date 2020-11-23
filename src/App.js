@@ -1,37 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import './App.scss'
 import axios from 'axios'
-import { Alphabet } from './components/Alphabet'
 import { Context } from './Context'
-
+import { Alphabet } from './components/Alphabet'
 import { Canvas } from './components/Canvas'
+import { Options } from './components/Options'
+import { RemainingTrials } from './components/RemainingTrials'
+import { API } from './API'
+
+const { word: wordApi } = API
 
 const WordDisplay = ({ maskedWord }) => (
   <div className="WordDisplay">{maskedWord}</div>
 )
-
-const RemainingTrials = (props) => {
-  const { remainingTrials } = React.useContext(Context)
-  return (
-    <p id="remaining-trials">
-      {remainingTrials ? <span> Trials: {remainingTrials}</span> : 'Game Over'}
-    </p>
-  )
-}
-
-const Options = (props) => {
-  const options = []
-
-  for (let i = 3; i <= 20; i++) {
-    options.push(
-      <option value={i} key={i}>
-        {i}
-      </option>
-    )
-  }
-
-  return <>{options}</>
-}
 
 function App() {
   const [minLength, setMinLength] = useState(2)
@@ -48,33 +29,39 @@ function App() {
     setMaxLength(event.target.value)
   }
 
-  const fetchDataAndStart = async () => {
-    try {
-      setResetChildren(true)
-      let url = ''
-      console.log('CLICKED NEW WORD')
-      if (isPhrase) {
-        url = '/words/phrases'
-        // wordDisplay.style.fontSize = '1.0rem'
-        // disableSelects();
-      } else {
-        // url = `/words/${difficulty}/${minLength}/${maxLength}`
-        // wordDisplay.style.fontSize = '1.7rem'
-        // enableSelects();
-      }
+  const fetchDataAndStart = useCallback(() => {
+    const getData = async () => {
+      try {
+        setResetChildren(true)
+        // let url = ''
+        console.log('CLICKED NEW WORD')
+        // if (isPhrase) {
+        //   url = '/words/phrases'
+        //   // wordDisplay.style.fontSize = '1.0rem'
+        //   // disableSelects();
+        // } else {
+        //   // url = `/words/${difficulty}/${minLength}/${maxLength}`
+        //   // wordDisplay.style.fontSize = '1.7rem'
+        //   // enableSelects();
+        // }
 
-      const { data } = await axios.get(`/word/${minLength}/${maxLength}`)
-      console.log(data)
-      setMaskedWord(data.maskedWord)
-      setRemainingTrials(data.remainingTrials)
-    } catch (error) {
-      console.error(error)
+        const response = await wordApi.getWord({ minLength, maxLength })
+
+        console.log('RESPOSNSE: ', response)
+        const { data } = response
+        console.log(data)
+        setMaskedWord(data.maskedWord)
+        setRemainingTrials(data.remainingTrials)
+      } catch (error) {
+        console.error(error)
+      }
     }
-  }
+    getData()
+  }, [maxLength, minLength])
 
   useEffect(() => {
-    console.log('masked changed', maskedWord)
-  }, [maskedWord])
+    fetchDataAndStart()
+  }, [])
 
   return (
     <Context.Provider

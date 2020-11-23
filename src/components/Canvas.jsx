@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import axios from 'axios'
 import { Context } from '../Context'
 
-// const canvas = document.getElementById('canvas-hang')
-// const ctx = canvas.getContext('2d')
+export const Canvas = () => {
+  const { remainingTrials } = useContext(Context)
+  const canvasRef = useRef(null)
 
-export { createPole }
+  useEffect(() => {
+    drawCanvas(remainingTrials, canvasRef)
+  }, [remainingTrials])
 
-export function drawCanvas(remainingTrials, canvasRef) {
+  return <canvas ref={canvasRef} className="Canvas" />
+}
+
+function drawCanvas(remainingTrials, canvasRef) {
   const canvas = canvasRef.current
   const ctx = canvas.getContext('2d')
 
@@ -64,14 +69,13 @@ export function drawCanvas(remainingTrials, canvasRef) {
       default:
         break
     }
+
+    drawPole(ctx)
   }
 }
 
 // @desc Draws pole shape
-function createPole(canvasRef) {
-  const canvas = canvasRef.current
-  const ctx = canvas.getContext('2d')
-
+function drawPole(ctx) {
   ctx.beginPath()
   ctx.strokeStyle = 'blue'
 
@@ -89,16 +93,4 @@ function createPole(canvasRef) {
   ctx.lineTo(105, 55)
 
   ctx.stroke()
-}
-
-export const Canvas = (props) => {
-  const { remainingTrials } = useContext(Context)
-  const canvasRef = useRef(null)
-
-  useEffect(() => {
-    drawCanvas(remainingTrials, canvasRef)
-    createPole(canvasRef)
-  }, [remainingTrials, canvasRef])
-
-  return <canvas ref={canvasRef} id="canvas-hang" className="Canvas" />
 }
