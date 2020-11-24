@@ -144,7 +144,9 @@ router.get('/:lettersMin/:lettersMax', async (req, res) => {
     res.send({
       wordLength: word.length,
       maskedWord,
-      remainingTrials: sessData.remainingTrials
+      remainingTrials: sessData.remainingTrials,
+      isGameWon: sessData.isGameWon,
+      wordData: sessData.isGameWon !== null && sessData.wordData
     })
   } catch (error) {
     console.error(error)
@@ -208,7 +210,8 @@ router.post('/', (req, res, next) => {
     maskedWord: sessData.maskedWord,
     isLetterInWord,
     remainingTrials: sessData.remainingTrials,
-    isGameWon: sessData.isGameWon
+    isGameWon: sessData.isGameWon,
+    wordData: sessData.isGameWon !== null && sessData.wordData
   })
 })
 module.exports = router

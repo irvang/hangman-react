@@ -11,7 +11,8 @@ export const Letter = ({ children }) => {
     setMaskedWord,
     setRemainingTrials,
     resetChildren,
-    setResetChildren
+    setResetChildren,
+    setIsGameWon
   } = React.useContext(Context)
 
   const [isLetterInWord, setIsLetterInWord] = useState(null)
@@ -31,8 +32,10 @@ export const Letter = ({ children }) => {
           letter: event.target.textContent
         })
 
-        const { maskedWord, isLetterInWord } = data
+        console.log('DATA', data)
+        const { maskedWord, isLetterInWord, isGameWon } = data
 
+        setIsGameWon(isGameWon)
         setIsLetterInWord(isLetterInWord)
         setMaskedWord(maskedWord)
         setRemainingTrials(data.remainingTrials)

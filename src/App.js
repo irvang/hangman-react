@@ -21,6 +21,7 @@ function App() {
   const [maskedWord, setMaskedWord] = useState('___')
   const [remainingTrials, setRemainingTrials] = useState(null)
   const [resetChildren, setResetChildren] = useState(false)
+  const [isGameWon, setIsGameWon] = useState(null)
 
   const handleMinLengthChange = (event) => {
     setMinLength(event.target.value)
@@ -63,6 +64,10 @@ function App() {
     fetchDataAndStart()
   }, [])
 
+  useEffect(() => {
+    console.log('IS GAME WON CHANGED')
+  }, [isGameWon])
+
   return (
     <Context.Provider
       value={{
@@ -70,7 +75,9 @@ function App() {
         remainingTrials,
         setRemainingTrials,
         setResetChildren,
-        resetChildren
+        resetChildren,
+        isGameWon,
+        setIsGameWon
       }}
     >
       <main className="center-screen">
