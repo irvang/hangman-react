@@ -27,7 +27,7 @@ export const Letter = ({ children }) => {
 
   const sendLetterToCompare = useCallback(
     (event) => {
-      ;(async () => {
+      ; (async () => {
         const { data } = await wordApi.compareLetter({
           letter: event.target.textContent
         })
@@ -48,7 +48,7 @@ export const Letter = ({ children }) => {
     <span
       className={classnames('Letter', {
         letterIsInWord: isLetterInWord,
-        letterNotInWord: isLetterInWord === false //false, not any falsy value
+        letterNotInWord: isLetterInWord === false //false, not just a falsy value
       })}
       value={children}
       onClick={sendLetterToCompare}

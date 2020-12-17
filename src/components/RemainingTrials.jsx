@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Context } from '../Context'
 
-export const RemainingTrials = (props) => {
+export const RemainingTrials = () => {
   const { remainingTrials, isGameWon } = React.useContext(Context)
 
   const [spanValue, setSpanValue] = useState(null)
@@ -19,7 +19,6 @@ export const RemainingTrials = (props) => {
   return (
     <p id="remaining-trials">
       {spanValue}
-      {/* {remainingTrials && <span> Trials: {remainingTrials}</span>} */}
     </p>
   )
 }

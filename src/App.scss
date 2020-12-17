@@ -1,8 +1,18 @@
 .center-screen {
   text-align: center;
   font-size: 1rem;
-  max-width: 400px;
+  // max-width: 400px;
+
   padding-top: 24px;
+  display: flex;
+  // border: 2px solid blue;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.halfScreen {
+  min-width: 300px;
+
 }
 
 .Letter {
@@ -10,8 +20,9 @@
   text-align: center;
   border: 1px solid #2196f3;
   border-radius: 10px;
-  padding: 0.18rem 0.4rem;
+  padding: 0.5rem 0.5rem;
   flex: 1 1 35px;
+  font-size: 1.5rem;
 }
 
 .Alphabet {
@@ -23,6 +34,7 @@
 
 .Alphabet_row {
   display: flex;
+  justify-content: space-evenly;
   flex-flow: row;
   padding: 0.2rem 0.3rem;
   margin: 1px;
@@ -43,7 +55,7 @@
 
 /*====MAIN-2 */
 
-section.main-2 > * {
+.rightElementsPadding > * {
   /* top-bottom right-left */
   padding: 15px 0;
 }
@@ -71,7 +83,7 @@ section.main-2 > * {
 
 #params {
   display: flex;
-  flex-direction: row;
+  // flex-direction: row;
   text-align: center;
   min-height: 5vh;
   font-size: 0.6rem;

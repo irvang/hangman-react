@@ -5,14 +5,11 @@ import { Context } from './Context'
 import { Alphabet } from './components/Alphabet'
 import { Canvas } from './components/Canvas'
 import { Options } from './components/Options'
+import { WordDisplay } from './components/WordDisplay'
 import { RemainingTrials } from './components/RemainingTrials'
 import { API } from './API'
 
 const { word: wordApi } = API
-
-const WordDisplay = ({ maskedWord }) => (
-  <div className="WordDisplay">{maskedWord}</div>
-)
 
 function App() {
   const [minLength, setMinLength] = useState(2)
@@ -22,6 +19,7 @@ function App() {
   const [remainingTrials, setRemainingTrials] = useState(null)
   const [resetChildren, setResetChildren] = useState(false)
   const [isGameWon, setIsGameWon] = useState(null)
+  const [isFetchingWord, setIsFetchingWord] = useState(false)
 
   const handleMinLengthChange = (event) => {
     setMinLength(event.target.value)
@@ -35,14 +33,16 @@ function App() {
       try {
         setResetChildren(true)
 
-        console.log('CLICKED NEW WORD')
+        setIsFetchingWord(true)
         // if is word, if is phrase
 
         const response = await wordApi.getWord({ minLength, maxLength })
 
+
         console.log('RESPOSNSE: ', response)
         const { data } = response
         console.log(data)
+        setIsFetchingWord(false)
         setMaskedWord(data.maskedWord)
         setRemainingTrials(data.remainingTrials)
       } catch (error) {
@@ -69,19 +69,25 @@ function App() {
         setResetChildren,
         resetChildren,
         isGameWon,
-        setIsGameWon
+        setIsGameWon,
+
       }}
     >
       <main className="center-screen">
-        <Alphabet />
+        <div className='halfScreen'>
 
-        <Canvas />
+          <Alphabet />
 
-        <WordDisplay maskedWord={maskedWord} />
+          <Canvas />
 
-        <RemainingTrials />
+          <WordDisplay
+            maskedWord={maskedWord}
+            isFetchingWord={isFetchingWord} />
 
-        <section className="main-2">
+          <RemainingTrials />
+        </div>
+
+        <section className="halfScreen rightElementsPadding">
           <div className="game-mode">
             Game mode:&nbsp;
             <label>
@@ -96,6 +102,7 @@ function App() {
           <button type="button" id="new-word-b" onClick={fetchDataAndStart}>
             New word
           </button>
+
           <button
             type="button"
             id="new-word-b"
