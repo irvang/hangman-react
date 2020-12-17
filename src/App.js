@@ -34,17 +34,9 @@ function App() {
     const getData = async () => {
       try {
         setResetChildren(true)
-        // let url = ''
+
         console.log('CLICKED NEW WORD')
-        // if (isPhrase) {
-        //   url = '/words/phrases'
-        //   // wordDisplay.style.fontSize = '1.0rem'
-        //   // disableSelects();
-        // } else {
-        //   // url = `/words/${difficulty}/${minLength}/${maxLength}`
-        //   // wordDisplay.style.fontSize = '1.7rem'
-        //   // enableSelects();
-        // }
+        // if is word, if is phrase
 
         const response = await wordApi.getWord({ minLength, maxLength })
 
@@ -93,7 +85,7 @@ function App() {
           <div className="game-mode">
             Game mode:&nbsp;
             <label>
-              <input type="checkbox" name="phrase" value="word" checked /> Word
+              <input type="checkbox" name="phrase" value="word" /> Word
             </label>
             <label>
               <input type="checkbox" name="word" value="phrase" />
@@ -108,7 +100,7 @@ function App() {
             type="button"
             id="new-word-b"
             onClick={async (event) => {
-              const { data } = axios.get('/word/data')
+              const { data } = axios.get('/api/word/data')
               console.log('GOTTEN :', data)
             }}
           >
@@ -118,18 +110,6 @@ function App() {
           <RemainingTrials />
 
           <section id="params">
-            {/* <div>
-            <label htmlFor="difficulty">Difficulty</label>
-            <select
-              className="isDisabled"
-              name="difficulty"
-              id="difficulty"
-              defaultValue={3}
-            >
-              <Options />
-            </select>
-          </div> */}
-
             <div>
               <label htmlFor="min-length">Min length</label>
               <select
@@ -162,7 +142,7 @@ function App() {
           </section>
         </section>
 
-        {/* // <script type="module" src="js/index.js"></script> */}
+
       </main>
     </Context.Provider>
   )
