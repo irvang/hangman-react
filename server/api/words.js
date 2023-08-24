@@ -20,7 +20,8 @@ const getWordsApi = async ({ lettersMin, lettersMax }) => {
   try {
     const { data } = await axios({
       method: 'GET',
-      url: 'https://wordsapiv1.p.rapidapi.com/words/',
+      // url: 'https://wordsapiv1.p.rapidapi.com/words/?hasDetails=[synonyms,definitions]',
+      url: 'https://wordsapiv1.p.rapidapi.com/words/?hasDetails=synonyms,definitions',
       headers: {
         'content-type': 'application/octet-stream',
         'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
@@ -75,6 +76,7 @@ const extractWordMetadata = (data) => {
 
     }
 
+    console.log('WORD METADATA ', wordMetadata)
     return wordMetadata
 
   } catch (error) {
@@ -84,60 +86,11 @@ const extractWordMetadata = (data) => {
 
 }
 
-const getMerriamWord = async ({ lettersMin, lettersMax }) => {
-  try {
-    const { data } = await axios({
-      method: 'GET',
-      url: 'https://wordsapiv1.p.rapidapi.com/words/',
-      headers: {
-        'content-type': 'application/octet-stream',
-        'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
-        'x-rapidapi-key': process.env.WORDS_API_KEY,
-        useQueryString: true
-      },
-      params: {
-        random: true,
-        // letterPattern: /^[a-zA-Z0-9]*$/,
-        letterPattern: '^[a-zA-Z]*$',
-        // // pronunciationpattern: ".*%C3%A6m%24",
-        limit: '100',
-        // // page: "1",
-        // letters: "5",
-        // lettersMin: '3',
-        // lettersMax: '17'
-        lettersMin,
-        lettersMax
-        // hasDetails: "hasDetails,typeof",
-      }
-    })
 
-    if (data.results) {
-      if (data.results[0].synonyms) {
-        console.log('SYNONYM', data.results[0].synonyms.toString())
-      }
-
-      const definitions = data.results.map((item) => item.definition)
-      console.log('DEFINITIONS', definitions)
-
-      if (data.results.typeOf) {
-        console.log('TYPE OF', data.typeOf)
-      }
-    }
-    if (data.syllables) {
-      console.log('SYLLABLES', data.syllables)
-    }
-    if (data) {
-      return data
-    }
-  } catch (error) {
-    console.error(error)
-  }
-}
 // @route: GET / words
 // @desc Get all words from Reach.io API.Uses fetch to get around the Cross -
 //   Origin Resource Sharing(CORS) policy issue when requesting access directly
 // from the front end.
-
 router.get('/:lettersMin/:lettersMax', async (req, res) => {
   // router.get('/:difficulty/:minLength/:maxLength', (req, res) => {
   /* To use the different queries in api: 
@@ -255,3 +208,55 @@ router.post('/', (req, res, next) => {
   })
 })
 module.exports = router
+
+
+
+/* const getMerriamWord = async ({ lettersMin, lettersMax }) => {
+  try {
+    const { data } = await axios({
+      method: 'GET',
+      url: 'https://wordsapiv1.p.rapidapi.com/words/',
+      headers: {
+        'content-type': 'application/octet-stream',
+        'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
+        'x-rapidapi-key': process.env.WORDS_API_KEY,
+        useQueryString: true
+      },
+      params: {
+        random: true,
+        // letterPattern: /^[a-zA-Z0-9]*$/,
+        letterPattern: '^[a-zA-Z]*$',
+        // // pronunciationpattern: ".*%C3%A6m%24",
+        limit: '100',
+        // // page: "1",
+        // letters: "5",
+        // lettersMin: '3',
+        // lettersMax: '17'
+        lettersMin,
+        lettersMax
+        // hasDetails: "hasDetails,typeof",
+      }
+    })
+
+    if (data.results) {
+      if (data.results[0].synonyms) {
+        console.log('SYNONYM', data.results[0].synonyms.toString())
+      }
+
+      const definitions = data.results.map((item) => item.definition)
+      console.log('DEFINITIONS', definitions)
+
+      if (data.results.typeOf) {
+        console.log('TYPE OF', data.typeOf)
+      }
+    }
+    if (data.syllables) {
+      console.log('SYLLABLES', data.syllables)
+    }
+    if (data) {
+      return data
+    }
+  } catch (error) {
+    console.error(error)
+  }
+} */

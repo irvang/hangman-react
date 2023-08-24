@@ -11,7 +11,6 @@ import { DisplayMetadata } from './components/DisplayMetadata'
 
 // const { words: wordsApi } = API
 
-
 function App() {
   const [minLength, setMinLength] = useState(2)
   const [maxLength, setMaxLength] = useState(15)
@@ -73,15 +72,15 @@ function App() {
       }}
     >
       <main className="center-screen">
-        <div className='halfScreen'>
-
+        <div className="halfScreen">
           <Alphabet />
 
           <Canvas />
 
           <WordDisplay
             maskedWord={maskedWord}
-            isFetchingWord={isFetchingWord} />
+            isFetchingWord={isFetchingWord}
+          />
 
           <RemainingTrials />
         </div>
@@ -143,12 +142,8 @@ function App() {
             </div>
           </section>
 
-
           <DisplayMetadata />
-
         </section>
-
-
       </main>
     </Context.Provider>
   )

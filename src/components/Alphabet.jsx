@@ -1,42 +1,22 @@
 import { Letter } from './Letter'
 
+const alphabetLetters = [
+  ['a', 'b', 'c', 'd', 'e'],
+  ['f', 'g', 'h', 'i', 'j'],
+  ['k', 'l', 'm', 'n', 'o'],
+  ['p', 'q', 'r', 's', 't'],
+  ['u', 'v', 'w', 'x', 'y', 'z']
+]
+
 export const Alphabet = (props) => (
   <div className="Alphabet">
-    <div className="Alphabet_row">
-      <Letter>a</Letter>
-      <Letter>b</Letter>
-      <Letter>c</Letter>
-      <Letter>d</Letter>
-      <Letter>e</Letter>
-    </div>
-    <div className="Alphabet_row">
-      <Letter>f</Letter>
-      <Letter>g</Letter>
-      <Letter>h</Letter>
-      <Letter>i</Letter>
-      <Letter>j</Letter>
-    </div>
-    <div className="Alphabet_row">
-      <Letter>k</Letter>
-      <Letter>l</Letter>
-      <Letter>m</Letter>
-      <Letter>n</Letter>
-      <Letter>o</Letter>
-    </div>
-    <div className="Alphabet_row">
-      <Letter>p</Letter>
-      <Letter>q</Letter>
-      <Letter>r</Letter>
-      <Letter>s</Letter>
-      <Letter>t</Letter>
-    </div>
-    <div className="Alphabet_row">
-      <Letter>u</Letter>
-      <Letter>v</Letter>
-      <Letter>w</Letter>
-      <Letter>x</Letter>
-      <Letter>y</Letter>
-      <Letter>z</Letter>
-    </div>
+    {
+      alphabetLetters.map((row, i) => {
+        return <div key={row[0][0]} className="Alphabet_row">
+          {row.map((letter) => { return <Letter key={letter}>{letter}</Letter> })}
+        </div>
+      })
+    }
+
   </div>
 )
