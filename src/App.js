@@ -36,14 +36,9 @@ function App() {
         setResetChildren(true)
 
         setIsFetchingWord(true)
-        // if is word, if is phrase
 
         const response = await API.words.getWord({ minLength, maxLength })
-
-        console.log('Initial get RESPOSNSE: ', response)
-
         const { data } = response
-        console.log('DATA - ', data)
 
         setIsFetchingWord(false)
         setMaskedWord(data.maskedWord)
@@ -59,9 +54,9 @@ function App() {
     fetchDataAndStart()
   }, [fetchDataAndStart])
 
-  useEffect(() => {
-    console.log('IS GAME WON CHANGED')
-  }, [isGameWon])
+  // useEffect(() => {
+  //   console.log('IS GAME WON CHANGED')
+  // }, [isGameWon])
 
   return (
     <Context.Provider

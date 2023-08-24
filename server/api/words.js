@@ -42,29 +42,9 @@ const getWordsApi = async ({ lettersMin, lettersMax }) => {
         // hasDetails: "hasDetails,typeof",
       }
     })
-    // console.clear();
-    console.log('++++ DATA: ', data)
-    // console.log('DATA.results: ', data.results)
-    // data to be sent to front
+
+    // data to pass to get route
     if (data) {
-      // log for testing
-      if (data.results && data.results.length > 0) {
-        if (data.results[0].synonyms) {
-          console.log('SYNONYM', data.results[0].synonyms.toString())
-        }
-        console.log(
-          'DEFINITIONS',
-          data.results.map((item) => item.definition)
-        )
-
-        if (data.results.typeOf) {
-          console.log('TYPE OF', data.typeOf)
-        }
-      }
-      if (data.syllables) {
-        console.log('SYLLABLES', data.syllables)
-      }
-
       return data
     }
   } catch (error) {
@@ -86,21 +66,13 @@ const extractWordMetadata = (data) => {
     wordMetadata.syllables = data.syllables
 
     if (data.results && data.results.length > 0) {
-      if (data.results[0].synonyms) {
-        // wordMetadata.synonyms = data.results[0].synonyms.toString()
-        // console.log('SYNONYM', wordMetadata.synonyms)
-      }
 
-      wordMetadata.synonymsAndDefs = data.results.map((item) => ({ definition: item.definition, synonyms: item.synonyms }))
+      // create object with definitions and synonyms 
+      // {definitions: <string>, synonyms: <Array> }
+      wordMetadata.synonymsAndDefs = data.results.map((item) => ({
+        definition: item.definition, synonyms: item.synonyms
+      }))
 
-      console.log(
-        'DEFINITIONS',
-        wordMetadata.synonymsAndDefs
-      )
-
-      if (data.results.typeOf) {
-        console.log('TYPE OF', data.typeOf)
-      }
     }
 
     return wordMetadata
@@ -138,8 +110,6 @@ const getMerriamWord = async ({ lettersMin, lettersMax }) => {
         // hasDetails: "hasDetails,typeof",
       }
     })
-    // console.clear();
-    console.log('DATA: ', data)
 
     if (data.results) {
       if (data.results[0].synonyms) {
@@ -178,7 +148,6 @@ router.get('/:lettersMin/:lettersMax', async (req, res) => {
 
     const data = await getWordsApi({ lettersMin, lettersMax })
 
-    console.log('DATA --- ', data)
     if (!data) {
       throw Error("'data' is undefined")
     }
@@ -227,9 +196,7 @@ router.get('/metadata', async (req, res, next) => {
   try {
 
     const { wordData } = req.session
-    console.log('DATA IN SESSION', wordData)
-
-    console.log('COOKIE', req.session.cookie)
+    // console.log('COOKIE', req.session.cookie)
     return res.send({ theData: req.session })
   } catch (error) {
     console.error('ERROR - in /metadata', error)
@@ -278,16 +245,13 @@ router.post('/', (req, res, next) => {
     }
   }
 
-  console.log('IS GAME WON', sessionData.isGameWon)
   res.send({
     maskedWord: sessionData.maskedWord,
     isLetterInWord,
     remainingTrials: sessionData.remainingTrials,
     isGameWon: sessionData.isGameWon,
-    // wordData: sessionData.isGameWon !== null && sessionData.wordData,
-
     /* Is game won remains null until set to either true or false. We account for that change.  */
-    wordMetadata: sessionData.isGameWon !== null && sessionData.wordMetadata 
+    wordMetadata: sessionData.isGameWon !== null && sessionData.wordMetadata
   })
 })
 module.exports = router

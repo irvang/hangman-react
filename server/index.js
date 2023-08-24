@@ -1,23 +1,5 @@
-// const express = require('express')
-// // const bodyParser = require('body-parser')
-// const path = require('path')
-// const app = express()
-// app.use(express.static(path.join(__dirname, 'build')))
-
-// app.get('/ping', function (req, res) {
-//   return res.send('pong')
-// })
-
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, 'build', 'index.html'))
-// })
-
-// app.listen(process.env.PORT || 8080, () => {
-//   console.log(`Server is listening on port ${process.env.PORT || 8080}`)
-// })
-
 /* 
-App deployed in heroku here: https://manhang-irv.herokuapp.com/
+
 */
 
 //====NPM MODULES
@@ -51,5 +33,5 @@ app.use('/api/words', wordsApiRouter)
 
 //====SERVER CONNECTION
 app.listen(PORT, function (a, b, c, d) {
-  console.log('Server listening on port ' + PORT)
+  console.info('Server listening on port ' + PORT)
 })

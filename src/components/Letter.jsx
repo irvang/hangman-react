@@ -37,13 +37,14 @@ export const Letter = ({ children }) => {
           letter: event.target.textContent
         })
 
-        console.log('DATA ', data)
         const { maskedWord, isLetterInWord, isGameWon } = data
 
         setIsGameWon(isGameWon)
         setIsLetterInWord(isLetterInWord)
         setMaskedWord(maskedWord)
         setRemainingTrials(data.remainingTrials)
+
+        // changes from null to either false or true
         data.wordMetadata && setWordMetadata(data.wordMetadata)
 
       })()

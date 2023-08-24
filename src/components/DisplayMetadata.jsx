@@ -12,7 +12,7 @@ export const DisplayMetadata = () => {
   const {
     wordMetadata
   } = React.useContext(Context)
-  console.log('METADATA: ', wordMetadata)
+
   return wordMetadata && <section className="definitions">
 
     <p className='word'><b>{wordMetadata.word}</b> </p>
@@ -32,7 +32,7 @@ export const DisplayMetadata = () => {
         }
 
         {/* do not draw the last line */}
-      {idx !== arr1.length -1 && <hr/>}
+        {idx !== arr1.length - 1 && <hr />}
       </ div>
     })}
 
