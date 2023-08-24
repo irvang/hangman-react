@@ -1,5 +1,5 @@
-import { word } from './word'
+import { words } from './words'
 
 export const API = {
-  word
+  words
 }

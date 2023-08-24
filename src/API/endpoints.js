@@ -1,3 +1,3 @@
 export const endpoints = {
-  word: '/api/word'
+  words: '/api/words'
 }

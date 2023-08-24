@@ -26,7 +26,7 @@ const app = express()
 const session = require('express-session')
 require('dotenv').config()
 
-const wordsApiRouter = require('./api/word')
+const wordsApiRouter = require('./api/words')
 
 const PORT = process.env.PORT || 8080
 
@@ -47,7 +47,7 @@ app.use(
   })
 )
 
-app.use('/api/word', wordsApiRouter)
+app.use('/api/words', wordsApiRouter)
 
 //====SERVER CONNECTION
 app.listen(PORT, function (a, b, c, d) {

@@ -1,3 +1,7 @@
+/**
+ * Router for the Words API
+ * Use router to handle the routes. 
+ */
 const express = require('express')
 const router = express.Router()
 const fetch = require('node-fetch')
@@ -7,7 +11,11 @@ require('dotenv').config()
 const axios = require('axios')
 
 // https://blog.api.rakuten.net/top-10-best-dictionary-apis-oxford-urban-wordnik/
-
+/**
+ * Gets the word from RapidAPI (Words API) that is sent to front
+ * @param {*} param0 
+ * @returns 
+ */
 const getWordsApi = async ({ lettersMin, lettersMax }) => {
   try {
     const { data } = await axios({
@@ -25,40 +33,83 @@ const getWordsApi = async ({ lettersMin, lettersMax }) => {
         letterPattern: '^[a-zA-Z]*$',
         // // pronunciationpattern: ".*%C3%A6m%24",
         limit: '100',
+        lettersMin,
+        lettersMax,
         // // page: "1",
         // letters: "5",
         // lettersMin: '3',
         // lettersMax: '17'
-        lettersMin,
-        lettersMax
         // hasDetails: "hasDetails,typeof",
       }
     })
     // console.clear();
-    console.log('DATA: ', data)
+    console.log('++++ DATA: ', data)
+    // console.log('DATA.results: ', data.results)
+    // data to be sent to front
+    if (data) {
+      // log for testing
+      if (data.results && data.results.length > 0) {
+        if (data.results[0].synonyms) {
+          console.log('SYNONYM', data.results[0].synonyms.toString())
+        }
+        console.log(
+          'DEFINITIONS',
+          data.results.map((item) => item.definition)
+        )
 
-    if (data.results) {
-      if (data.results[0].synonyms) {
-        console.log('SYNONYM', data.results[0].synonyms.toString())
+        if (data.results.typeOf) {
+          console.log('TYPE OF', data.typeOf)
+        }
       }
+      if (data.syllables) {
+        console.log('SYLLABLES', data.syllables)
+      }
+
+      return data
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+/**
+ * Extract the metadata that comes from the Words API. 
+ * At the moment the definition is what I need is the definition and synonyms. 
+ * @param {*} param0 
+ * @returns 
+ */
+const extractWordMetadata = (data) => {
+  try {
+    const wordMetadata = {
+      word: data.word
+    }
+    wordMetadata.syllables = data.syllables
+
+    if (data.results && data.results.length > 0) {
+      if (data.results[0].synonyms) {
+        // wordMetadata.synonyms = data.results[0].synonyms.toString()
+        // console.log('SYNONYM', wordMetadata.synonyms)
+      }
+
+      wordMetadata.synonymsAndDefs = data.results.map((item) => ({ definition: item.definition, synonyms: item.synonyms }))
+
       console.log(
         'DEFINITIONS',
-        data.results.map((item) => item.definition)
+        wordMetadata.synonymsAndDefs
       )
 
       if (data.results.typeOf) {
         console.log('TYPE OF', data.typeOf)
       }
     }
-    if (data.syllables) {
-      console.log('SYLLABLES', data.syllables)
-    }
-    if (data) {
-      return data
-    }
+
+    return wordMetadata
+
   } catch (error) {
-    console.error(error)
+    console.error('ERROR processing metadata', error)
+    throw error
   }
+
 }
 
 const getMerriamWord = async ({ lettersMin, lettersMax }) => {
@@ -127,58 +178,79 @@ router.get('/:lettersMin/:lettersMax', async (req, res) => {
 
     const data = await getWordsApi({ lettersMin, lettersMax })
 
+    console.log('DATA --- ', data)
+    if (!data) {
+      throw Error("'data' is undefined")
+    }
     const { word } = data
     let maskedWord = ''
+
+    if (!word) {
+      throw Error('word is empty or undefined')
+    }
     // generate word dash string
-    for (let _ of word) {
+    for (let letter of word) {
       maskedWord += '_'
     }
 
-    const sessData = req.session
-    sessData.wordData = data
-    sessData.maskedWord = maskedWord
-    sessData.testedLetters = []
-    sessData.remainingTrials = 6
-    sessData.isGameWon = null
+    const sessionData = req.session
+
+    // wordData should hold word and definition
+    sessionData.wordData = data
+    sessionData.wordMetadata = extractWordMetadata(data)
+    sessionData.maskedWord = maskedWord
+    sessionData.testedLetters = []
+    sessionData.remainingTrials = 6
+    sessionData.isGameWon = null
 
     res.send({
       wordLength: word.length,
       maskedWord,
-      remainingTrials: sessData.remainingTrials,
-      isGameWon: sessData.isGameWon,
-      wordData: sessData.isGameWon !== null && sessData.wordData
+      remainingTrials: sessionData.remainingTrials,
+      isGameWon: sessionData.isGameWon,
+      // wordData: sessionData.isGameWon !== null && sessionData.wordData
+      // wordData: sessionData.isGameWon === null ? {} : sessionData.wordData,
+      wordMetadata: sessionData.wordMetadata
     })
   } catch (error) {
     console.error(error)
+    throw error
   }
 })
 
-router.get('/data', (req, res, next) => {
-  const { wordData } = req.session
-  console.log('DATA IN SESSION', wordData)
+/**
+ * Returs the word metadata that is stored on session
+ * 
+ * not used at the moment
+ */
+router.get('/metadata', async (req, res, next) => {
+  try {
 
-  console.log('COOKIE', req.session.cookie)
-  return res.send({ theData: req.session })
+    const { wordData } = req.session
+    console.log('DATA IN SESSION', wordData)
+
+    console.log('COOKIE', req.session.cookie)
+    return res.send({ theData: req.session })
+  } catch (error) {
+    console.error('ERROR - in /metadata', error)
+    res.status(404).send({ message: 'NOT FOUND' })
+  }
 })
 
+/**
+ * Compares letter. Does replacement and masking. 
+ */
 router.post('/', (req, res, next) => {
   const { letter } = req.body
 
-  const sessData = req.session
-  // if(!sessData) {
+  const sessionData = req.session
 
-  // }
-
-  console.log('COOKIE', req.session.cookie)
-
-  const { word } = sessData.wordData
-  const { maskedWord } = sessData
-
-  console.log('BODY, wordData: ', letter, word)
+  const { word } = sessionData.wordData
+  const { maskedWord } = sessionData
 
   let isLetterInWord = null
 
-  if (sessData.remainingTrials > 0 && sessData.isGameWon === null) {
+  if (sessionData.remainingTrials > 0 && sessionData.isGameWon === null) {
     if (word.includes(letter)) {
       isLetterInWord = true
       let newMaskedWord = ''
@@ -191,27 +263,31 @@ router.post('/', (req, res, next) => {
         }
       }
 
-      sessData.maskedWord = newMaskedWord
+      sessionData.maskedWord = newMaskedWord
 
       if (word === newMaskedWord) {
-        sessData.isGameWon = true
+        sessionData.isGameWon = true
       }
     } else {
       isLetterInWord = false
-      sessData.remainingTrials -= 1
+      sessionData.remainingTrials -= 1
 
-      if (sessData.remainingTrials === 0) {
-        sessData.isGameWon = false
+      if (sessionData.remainingTrials === 0) {
+        sessionData.isGameWon = false
       }
     }
   }
 
+  console.log('IS GAME WON', sessionData.isGameWon)
   res.send({
-    maskedWord: sessData.maskedWord,
+    maskedWord: sessionData.maskedWord,
     isLetterInWord,
-    remainingTrials: sessData.remainingTrials,
-    isGameWon: sessData.isGameWon,
-    wordData: sessData.isGameWon !== null && sessData.wordData
+    remainingTrials: sessionData.remainingTrials,
+    isGameWon: sessionData.isGameWon,
+    // wordData: sessionData.isGameWon !== null && sessionData.wordData,
+
+    /* Is game won remains null until set to either true or false. We account for that change.  */
+    wordMetadata: sessionData.isGameWon !== null && sessionData.wordMetadata 
   })
 })
 module.exports = router

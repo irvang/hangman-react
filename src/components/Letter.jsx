@@ -4,15 +4,20 @@ import { Context } from '../Context'
 import classnames from 'classnames'
 import { API } from '../API'
 
-const { word: wordApi } = API
-
+// const { word: wordApi } = API
+/**
+ * 
+ * @param {string} props.children - each single alphabet letter: 'a','b', 'c', etc
+ * @returns 
+ */
 export const Letter = ({ children }) => {
   const {
     setMaskedWord,
     setRemainingTrials,
     resetChildren,
     setResetChildren,
-    setIsGameWon
+    setIsGameWon,
+    setWordMetadata
   } = React.useContext(Context)
 
   const [isLetterInWord, setIsLetterInWord] = useState(null)
@@ -28,17 +33,19 @@ export const Letter = ({ children }) => {
   const sendLetterToCompare = useCallback(
     (event) => {
       ; (async () => {
-        const { data } = await wordApi.compareLetter({
+        const { data } = await API.words.compareLetter({
           letter: event.target.textContent
         })
 
-        console.log('DATA', data)
+        console.log('DATA ', data)
         const { maskedWord, isLetterInWord, isGameWon } = data
 
         setIsGameWon(isGameWon)
         setIsLetterInWord(isLetterInWord)
         setMaskedWord(maskedWord)
         setRemainingTrials(data.remainingTrials)
+        data.wordMetadata && setWordMetadata(data.wordMetadata)
+
       })()
     },
     [setRemainingTrials, setMaskedWord]
@@ -49,6 +56,7 @@ export const Letter = ({ children }) => {
       className={classnames('Letter', {
         letterIsInWord: isLetterInWord,
         letterNotInWord: isLetterInWord === false //false, not just a falsy value
+        // letterNotInWord: !isLetterInWord  //???false, not just a falsy value
       })}
       value={children}
       onClick={sendLetterToCompare}
