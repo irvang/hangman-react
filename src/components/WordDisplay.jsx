@@ -1,6 +1,15 @@
+import React from 'react'
+import { Context } from '../Context'
+
+
 export const WordDisplay = ({
-  maskedWord,
-  isFetchingWord
-}) => (
-  <div className="WordDisplay">{isFetchingWord ? '...' : maskedWord}</div>
-)
+}) => {
+  const {
+    maskedWord,
+    isFetchingWord
+  } = React.useContext(Context)
+
+  return (
+    <div className="WordDisplay">{isFetchingWord ? '...' : maskedWord}</div>
+  )
+}

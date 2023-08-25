@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useState, useEffect, useCallback } from 'react'
 import { Context } from '../Context'
 import classnames from 'classnames'

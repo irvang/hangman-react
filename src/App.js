@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import './App.scss'
+// import './App.scss'
 import { Context } from './Context'
 import { Alphabet } from './components/Alphabet'
 import { Canvas } from './components/Canvas'
-import { Options } from './components/Options'
 import { WordDisplay } from './components/WordDisplay'
 import { RemainingTrials } from './components/RemainingTrials'
 import { API } from './API'
 import { DisplayMetadata } from './components/DisplayMetadata'
+import { GameMode } from './components/GameMode'
+import { NewWordBtn } from './components/NewWordBtn'
+import { MinMaxLength } from './components/MinMaxLength'
 
 // const { words: wordsApi } = API
 
@@ -60,6 +62,7 @@ function App() {
   return (
     <Context.Provider
       value={{
+        maskedWord,
         setMaskedWord,
         remainingTrials,
         setRemainingTrials,
@@ -68,80 +71,26 @@ function App() {
         isGameWon,
         setIsGameWon,
         wordMetadata,
-        setWordMetadata
+        setWordMetadata,
+        isFetchingWord,
+        handleMinLengthChange,
+        handleMaxLengthChange
       }}
     >
       <main className="center-screen">
         <div className="halfScreen">
           <Alphabet />
-
           <Canvas />
-
-          <WordDisplay
-            maskedWord={maskedWord}
-            isFetchingWord={isFetchingWord}
-          />
-
+          <WordDisplay />
           <RemainingTrials />
         </div>
 
         <section className="halfScreen rightElementsPadding">
-          <div className="game-mode">
-            Game mode:&nbsp;
-            <label>
-              <input type="checkbox" name="phrase" value="word" /> Word
-            </label>
-            <label>
-              <input type="checkbox" name="word" value="phrase" />
-              Phrase
-            </label>
-          </div>
 
-          <button type="button" id="new-word-b" onClick={fetchDataAndStart}>
-            New word
-          </button>
-
-          {/*   <button
-            type="button"
-            id="new-word-b"
-            onClick={async (event) => {
-              const { data } = axios.get('/api/word/data')
-              console.log('GOTTEN :', data)
-            }}
-          >
-            Get data
-          </button> */}
-
+          {/* <GameMode/> */}
+          <NewWordBtn />
           <RemainingTrials />
-
-          <section id="params">
-            <div>
-              <label htmlFor="min-length">Min length</label>
-              <select
-                className="isDisabled"
-                name="min-length"
-                id="min-length"
-                onChange={handleMinLengthChange}
-                defaultValue={3}
-              >
-                <Options />
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="max-length">Max length</label>
-              <select
-                className="isDisabled"
-                defaultValue={15}
-                name="max-length"
-                id="max-length"
-                onChange={handleMaxLengthChange}
-              >
-                <Options />
-              </select>
-            </div>
-          </section>
-
+          <MinMaxLength />
           <DisplayMetadata />
         </section>
       </main>
