@@ -7,6 +7,7 @@ Implementation of the popular game [Hangman](https://en.wikipedia.org/wiki/Hangm
 - React
 - Node
 - Express
+- JavaScript (ES6)
 - Express router
 - React Hooks
 - API
