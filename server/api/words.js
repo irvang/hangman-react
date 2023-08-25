@@ -1,6 +1,6 @@
 /**
  * Router for the Words API
- * Use router to handle the routes. 
+ * Use router to handle the routes.
  */
 const express = require('express')
 const router = express.Router()
@@ -13,8 +13,8 @@ const axios = require('axios')
 // https://blog.api.rakuten.net/top-10-best-dictionary-apis-oxford-urban-wordnik/
 /**
  * Gets the word from RapidAPI (Words API) that is sent to front
- * @param {*} param0 
- * @returns 
+ * @param {*} param0
+ * @returns
  */
 const getWordsApi = async ({ lettersMin, lettersMax }) => {
   try {
@@ -35,7 +35,7 @@ const getWordsApi = async ({ lettersMin, lettersMax }) => {
         // // pronunciationpattern: ".*%C3%A6m%24",
         limit: '100',
         lettersMin,
-        lettersMax,
+        lettersMax
         // // page: "1",
         // letters: "5",
         // lettersMin: '3',
@@ -54,10 +54,10 @@ const getWordsApi = async ({ lettersMin, lettersMax }) => {
 }
 
 /**
- * Extract the metadata that comes from the Words API. 
- * At the moment the definition is what I need is the definition and synonyms. 
- * @param {*} param0 
- * @returns 
+ * Extract the metadata that comes from the Words API.
+ * At the moment the definition is what I need is the definition and synonyms.
+ * @param {*} param0
+ * @returns
  */
 const extractWordMetadata = (data) => {
   try {
@@ -67,25 +67,21 @@ const extractWordMetadata = (data) => {
     wordMetadata.syllables = data.syllables
 
     if (data.results && data.results.length > 0) {
-
-      // create object with definitions and synonyms 
+      // create object with definitions and synonyms
       // {definitions: <string>, synonyms: <Array> }
       wordMetadata.synonymsAndDefs = data.results.map((item) => ({
-        definition: item.definition, synonyms: item.synonyms
+        definition: item.definition,
+        synonyms: item.synonyms
       }))
-
     }
 
     console.log('WORD METADATA ', wordMetadata)
     return wordMetadata
-
   } catch (error) {
     console.error('ERROR processing metadata', error)
     throw error
   }
-
 }
-
 
 // @route: GET / words
 // @desc Get all words from Reach.io API.Uses fetch to get around the Cross -
@@ -142,10 +138,10 @@ router.get('/:lettersMin/:lettersMax', async (req, res) => {
 
 /**
  * Returs the word metadata that is stored on session
- * 
+ *
  * not used at the moment
  */
-router.get('/metadata', async (req, res, next) => {
+/* router.get('/metadata', async (req, res, next) => {
   try {
 
     const { wordData } = req.session
@@ -155,10 +151,10 @@ router.get('/metadata', async (req, res, next) => {
     console.error('ERROR - in /metadata', error)
     res.status(404).send({ message: 'NOT FOUND' })
   }
-})
+}) */
 
 /**
- * Compares letter. Does replacement and masking. 
+ * Compares letter. Does replacement and masking.
  */
 router.post('/', (req, res, next) => {
   const { letter } = req.body
@@ -208,8 +204,6 @@ router.post('/', (req, res, next) => {
   })
 })
 module.exports = router
-
-
 
 /* const getMerriamWord = async ({ lettersMin, lettersMax }) => {
   try {
