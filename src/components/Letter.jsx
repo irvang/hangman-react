@@ -56,7 +56,6 @@ export const Letter = ({ children }) => {
       className={classnames('Letter', {
         letterIsInWord: isLetterInWord,
         letterNotInWord: isLetterInWord === false //false, not just a falsy value
-        // letterNotInWord: !isLetterInWord  //???false, not just a falsy value
       })}
       value={children}
       onClick={sendLetterToCompare}

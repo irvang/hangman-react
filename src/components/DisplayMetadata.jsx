@@ -21,7 +21,9 @@ export const DisplayMetadata = () => {
 
       // using fragment because of key restriction
       return <div key={obj.definition} className=''>
+        
         {obj.definition && <p className='defined'><b>Definition:</b> {obj.definition}</p>}
+
         {obj.synonyms &&
           <p className='defined'><b>Synonyms:</b>  {obj.synonyms.map((synonym, i, arr2) => {
             // add a comma if not last one

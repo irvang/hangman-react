@@ -70,6 +70,9 @@ function drawCanvas(remainingTrials, canvasRef) {
         break
     }
 
+    // background color of canvas
+    // ctx.fillStyle = "rgb(245,245,245)"
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawPole(ctx)
   }
 }

@@ -8,7 +8,7 @@ const alphabetLetters = [
   ['u', 'v', 'w', 'x', 'y', 'z']
 ]
 
-export const Alphabet = (props) => (
+export const Alphabet = () => (
   <div className="Alphabet">
     {
       alphabetLetters.map((row, i) => {

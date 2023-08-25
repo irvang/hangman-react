@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react'
-// import './App.scss'
 import { Context } from './Context'
 import { Alphabet } from './components/Alphabet'
 import { Canvas } from './components/Canvas'
@@ -7,11 +6,9 @@ import { WordDisplay } from './components/WordDisplay'
 import { RemainingTrials } from './components/RemainingTrials'
 import { API } from './API'
 import { DisplayMetadata } from './components/DisplayMetadata'
-import { GameMode } from './components/GameMode'
+// import { GameMode } from './components/GameMode'
 import { NewWordBtn } from './components/NewWordBtn'
 import { MinMaxLength } from './components/MinMaxLength'
-
-// const { words: wordsApi } = API
 
 function App() {
   const [minLength, setMinLength] = useState(2)
@@ -37,6 +34,7 @@ function App() {
         setResetChildren(true)
 
         setIsFetchingWord(true)
+        setWordMetadata(null) // clear definitions and synonyms
 
         const response = await API.words.getWord({ minLength, maxLength })
         const { data } = response
@@ -44,6 +42,7 @@ function App() {
         setIsFetchingWord(false)
         setMaskedWord(data.maskedWord)
         setRemainingTrials(data.remainingTrials)
+        setIsGameWon(null)
       } catch (error) {
         console.error(error)
       }
@@ -54,10 +53,6 @@ function App() {
   useEffect(() => {
     fetchDataAndStart()
   }, [fetchDataAndStart])
-
-  // useEffect(() => {
-  //   console.log('IS GAME WON CHANGED')
-  // }, [isGameWon])
 
   return (
     <Context.Provider
@@ -74,7 +69,8 @@ function App() {
         setWordMetadata,
         isFetchingWord,
         handleMinLengthChange,
-        handleMaxLengthChange
+        handleMaxLengthChange,
+        fetchDataAndStart
       }}
     >
       <main className="center-screen">
@@ -86,7 +82,6 @@ function App() {
         </div>
 
         <section className="halfScreen rightElementsPadding">
-
           {/* <GameMode/> */}
           <NewWordBtn />
           <RemainingTrials />
