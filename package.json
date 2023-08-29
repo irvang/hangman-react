@@ -25,10 +25,10 @@
   "scripts": {
     "client": "npm start",
     "server": "node server/index.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm start\"",
-    "dev2": "npm run server & npm start",
-    "start": "react-scripts start",
-    "start2": "npm run server & npm run client",
+    "dev2": "concurrently --kill-others-on-fail \"npm run server\" \"npm start\"",
+    "dev": "npm run server & npm start",
+    "start2": "react-scripts start",
+    "start": "node server/index.js & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -53,8 +53,8 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "nodemon": "^3.0.1",
     "sass": "^1.66.1"
   }
