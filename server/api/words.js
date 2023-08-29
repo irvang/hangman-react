@@ -4,8 +4,7 @@
  */
 const express = require('express')
 const router = express.Router()
-const fetch = require('node-fetch')
-const fs = require('fs')
+// const fs = require('fs')
 require('dotenv').config()
 
 const axios = require('axios')
