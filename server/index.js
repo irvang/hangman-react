@@ -32,6 +32,6 @@ app.use(
 app.use('/api/words', wordsApiRouter)
 
 //====SERVER CONNECTION
-app.listen(PORT, function (a, b, c, d) {
+app.listen(PORT, function () {
   console.info('Server listening on port ' + PORT)
 })

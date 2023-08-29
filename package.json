@@ -26,15 +26,16 @@
   },
   "scripts": {
     "client": "npm start",
-    "server": "nodemon server/index.js",
+    "server": "node server/index.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm start\"",
     "dev2": "npm run server & npm start",
     "start": "react-scripts start",
+    "start2": "npm run server & npm run client",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:8082",
   "eslintConfig": {
     "extends": [
       "react-app",
