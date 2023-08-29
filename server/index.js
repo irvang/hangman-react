@@ -10,7 +10,7 @@ require('dotenv').config()
 
 const wordsApiRouter = require('./api/words')
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8081
 
 app.set('trust proxy', 1) // trust first proxy
 

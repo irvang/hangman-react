@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=16",
+    "node": ">=16 <17",
     "npm": ">=8.9.14"
   },
   "dependencies": {
@@ -27,13 +27,14 @@
     "server": "node server/index.js",
     "dev2": "concurrently --kill-others-on-fail \"npm run server\" \"npm start\"",
     "dev": "npm run server & npm start",
-    "start2": "react-scripts start",
+    "start2": "react-scripts build & npm run server & react-scripts start",
     "start": "node server/index.js & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject", 
+    "build:digitalocean": "npm install --production=false && npm run build && npm ci"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:8081",
   "eslintConfig": {
     "extends": [
       "react-app",
